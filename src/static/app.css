@@ -1,0 +1,44 @@
+.height-400 {
+  height: 400px;
+}
+
+.height-300 {
+  height: 300px;
+}
+
+.page-center {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  margin: auto;
+}
+
+.btnSubmit {
+  width: 50%;
+  border-radius: 1rem;
+  padding: 1.5%;
+  border: none;
+  cursor: pointer;
+}
+
+.general-form .btnSubmit {
+  font-weight: 600;
+  color: #fff;
+  background-color: #0062cc;
+}
+
+.general-form .ForgetPwd {
+  color: #0062cc;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.general-form {
+  width: 500px;
+  background: #fff;
+  padding: 3%;
+  box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 9px 26px 0 rgba(0, 0, 0, 0.19);
+}
