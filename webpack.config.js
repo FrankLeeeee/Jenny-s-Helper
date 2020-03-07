@@ -2,7 +2,10 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-let webpack = require("webpack");
+
+function resolve(dir) {
+  return path.join(__dirname, dir);
+}
 
 module.exports = {
   entry: "./src/index.js",
@@ -23,7 +26,8 @@ module.exports = {
   devServer: {
     contentBase: path.join(__dirname, "dist"),
     port: 9000,
-    open: true
+    open: true,
+    historyApiFallback: true
   },
   module: {
     rules: [
@@ -32,17 +36,13 @@ module.exports = {
         use: [{ loader: "style-loader" }, { loader: "css-loader" }]
       },
       {
-        test: /\.(png|jpe?g|gif)$/,
-        include: path.join(__dirname, "public/assets/"),
-        use: [{ loader: "url-loader" }, { loader: "file-loader" }]
+        test: /\.(png|jpg|jpeg|gif)$/,
+        include: path.join(__dirname, "public/"),
+        use: [{ loader: "url-loader" }]
       },
       {
         test: /\.(eot|ttf|woff|svg)$/,
         use: "file-loader"
-      },
-      {
-        test: /\.(htm|html)$/,
-        use: "html-withimg-loader"
       },
       {
         test: /\.js$/,
@@ -51,5 +51,10 @@ module.exports = {
         exclude: /node_modules/ // 排除掉node_modules，优化打包速度
       }
     ]
+  },
+  resolve: {
+    alias: {
+      "@": resolve("public") // 这样配置后 @ 可以指向 src 目录
+    }
   }
 };

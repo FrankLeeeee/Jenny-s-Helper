@@ -1,15 +1,15 @@
 import React, { Component } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../static/app.css";
-import logo from "../../public/assets/logo.png";
+import logo from "@/assets/logo.png";
 
 export default class Login extends Component {
   render() {
     return (
-      <div className="page-center general-form height-400 rounded">
+      <div className="general-form rounded">
         <form>
           <div className="text-center mb-3">
-            <img src={logo} width="100px" />
+            <img src={logo} width="100px" alt="logo" />
           </div>
           <div className="form-group">
             <input

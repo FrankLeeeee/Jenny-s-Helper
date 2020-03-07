@@ -6,7 +6,7 @@ import thermometer from "../../public/assets/thermometer.png";
 export default class Temperature extends Component {
   render() {
     return (
-      <div className="page-center general-form height-300 rounded">
+      <div className="general-form rounded">
         <form>
           <div className="text-center mb-3">
             <img src={thermometer} width="100px" />
