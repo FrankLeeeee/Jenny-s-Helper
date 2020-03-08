@@ -1,3 +1,6 @@
+.w-500 {
+  width: 500px;
+}
 .btnSubmit {
   width: 50%;
   border-radius: 1rem;
@@ -19,7 +22,6 @@
 }
 
 .general-form {
-  width: 500px;
   background: #fff;
   padding: 3%;
   box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 9px 26px 0 rgba(0, 0, 0, 0.19);
@@ -31,4 +33,12 @@
   left: 50%;
   /* bring your own prefixes */
   transform: translate(-50%, -50%);
+}
+
+.border-left-primary {
+  border-left: 0.25rem solid #4e73df !important;
+}
+
+.border-left-success {
+  border-left: 0.25rem solid #1cc88a !important;
 }

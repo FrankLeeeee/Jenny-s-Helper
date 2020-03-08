@@ -3,7 +3,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "../static/app.css";
 import Navbar from "../components/navbar";
 import WordCard from "../components/wordcard";
-import Timer from "../components/timer";
 
 export default class DictationPage extends Component {
   constructor() {
@@ -26,7 +25,7 @@ export default class DictationPage extends Component {
 
   createCards = () => {
     return this.questions_list.map((item, idx) => (
-      <div className="col-sm-6 col-md-4 col-lg-2">
+      <div className="col-sm-6 col-md-6 col-lg-4">
         <WordCard key={idx} question={item} />
       </div>
     ));
@@ -35,20 +34,17 @@ export default class DictationPage extends Component {
   render() {
     return (
       <div>
-        <div>
-          <Navbar />
-        </div>
-        <div className="fluid-container pl-3 pr-3">
+        <Navbar />
+        <div className="fluid-container pl-3 pr-3 mt-3 mb-3">
           <div className="row">
             <div className="col">
-              <div className="float-left">
-                <Timer min={3} />
-              </div>
-              <div className="float-right">
-                <button class="btn btn-success">开始</button>
+              <div className="float-right pr-3">
+                <button class="btn btn-success">提交</button>
               </div>
             </div>
           </div>
+        </div>
+        <div className="container pl-3 pr-3">
           <div className="row">{this.createCards()}</div>
         </div>
       </div>

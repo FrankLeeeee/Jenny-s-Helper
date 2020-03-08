@@ -2,12 +2,18 @@ import React, { Component } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../static/app.css";
 import logo from "@/assets/logo.png";
+import { withRouter, Link } from "react-router-dom";
 
-export default class Login extends Component {
+class Login extends Component {
+  loginOnSubmit = event => {
+    event.preventDefault();
+    this.props.history.push("/teacher/home");
+  };
+
   render() {
     return (
-      <div className="general-form rounded">
-        <form>
+      <div className="general-form w-500 rounded">
+        <form onSubmit={this.loginOnSubmit}>
           <div className="text-center mb-3">
             <img src={logo} width="100px" alt="logo" />
           </div>
@@ -31,12 +37,14 @@ export default class Login extends Component {
             <input type="submit" className="btnSubmit" value="登录" />
           </div>
           <div className="form-group text-center">
-            <a href="#" className="ForgetPwd">
-              忘记密码?
-            </a>
+            <Link to="/changePassword" className="ForgetPwd">
+              更改密码
+            </Link>
           </div>
         </form>
       </div>
     );
   }
 }
+
+export default withRouter(Login);
