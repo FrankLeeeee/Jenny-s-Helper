@@ -12,16 +12,32 @@ class Login extends Component {
 
   loginOnSubmit = (event) => {
     event.preventDefault();
-    fetch("http://franklee.online:8080/pong", {
+    fetch("http://localhost:8000/pong", {
       method: "GET",
       headers: {
-        "Content-Type": "application/json;charset=UTF-8",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": "true",
+        "Content-Type": "application/json",
       },
-      mode: "cors",
-      cache: "default",
+    }).then((data) => {
+      console.log(data);
     });
+    // });
+    // fetch("http://localhost:8080/user/login", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({
+    //     user_id: "2020000",
+    //     password: "123456",
+    //   }),
+    //   mode: "cors",
+    //   cache: "no-cache",
+    //   credentials: "same-origin",
+    // })
+    //   .then((res) => res.json())
+    //   .then((res) => {
+    //     console.log(res);
+    //   });
 
     // fetch("http://http://47.74.186.167:8080/user/login", {
     //   method: "POST",
