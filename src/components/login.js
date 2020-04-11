@@ -5,57 +5,45 @@ import logo from "@/assets/logo.png";
 import { withRouter, Link } from "react-router-dom";
 
 class Login extends Component {
-  state = {
-    user_id: "",
-    password: "",
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      user_id: "",
+      password: "",
+    };
+  }
 
   loginOnSubmit = (event) => {
     event.preventDefault();
-    fetch("http://localhost:8000/pong", {
-      method: "GET",
+
+    fetch("http://localhost:8000/user/login", {
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-    }).then((data) => {
-      console.log(data);
-    });
-    // });
-    // fetch("http://localhost:8080/user/login", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({
-    //     user_id: "2020000",
-    //     password: "123456",
-    //   }),
-    //   mode: "cors",
-    //   cache: "no-cache",
-    //   credentials: "same-origin",
-    // })
-    //   .then((res) => res.json())
-    //   .then((res) => {
-    //     console.log(res);
-    //   });
-
-    // fetch("http://http://47.74.186.167:8080/user/login", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json;charset=UTF-8",
-    //   },
-    // })
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     if (data.success) {
-    //       let token = data.subjects.token;
-    //       window.localStorage.setItem("token", token);
-    //     } else {
-    //       window.alert("wrong password");
-    //     }
-    //   });
-
-    // this.props.history.push("/teacher/home");
+      body: JSON.stringify({
+        user_id: this.state.user_id,
+        password: this.state.password,
+      }),
+      mode: "cors",
+      cache: "no-cache",
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.success) {
+          let role = res.subjects.role;
+          window.localStorage.setItem("token", res.subjects.token);
+          if (role == 0) {
+          } else if (role == 1) {
+            this.props.history.push("/teacher/home");
+          } else {
+            this.props.history.push("/student/home");
+          }
+        } else {
+          console.log(this.props.notifyFn);
+          this.props.notifyFn("error", "用户名或者密码错误", 3000);
+        }
+      });
   };
 
   userIdOnChange = (event) => {
@@ -80,6 +68,7 @@ class Login extends Component {
               placeholder="用户名"
               value={this.state.user_id}
               onChange={this.userIdOnChange}
+              required
             />
           </div>
           <div className="form-group mb-4">
@@ -89,6 +78,7 @@ class Login extends Component {
               placeholder="密码"
               value={this.state.password}
               onChange={this.passwordOnChange}
+              required
             />
           </div>
           <div className="form-group text-center">

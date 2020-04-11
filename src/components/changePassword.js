@@ -5,9 +5,57 @@ import logo from "@/assets/logo.png";
 import { withRouter } from "react-router-dom";
 
 class ChangePassword extends Component {
-  changePasswordOnSubmit = event => {
-    event.preventDefault();
+  constructor(props) {
+    super(props);
+    this.state = {
+      user_id: "",
+      old_password: "",
+      new_password: "",
+      new_password_repeat: "",
+    };
+  }
+
+  backToLogin = () => {
     this.props.history.push("/");
+  };
+
+  changePasswordOnSubmit = (event) => {
+    event.preventDefault();
+
+    if (this.state.new_password != this.state.new_password_repeat) {
+      this.props.notifyFn("error", "两次输入的密码不一致");
+    } else {
+      fetch("http://localhost:8000/user/update", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          user_id: this.state.user_id,
+          old_password: this.state.old_password,
+          new_password: this.state.new_password,
+        }),
+        mode: "cors",
+        cache: "no-cache",
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          console.log(res);
+          if (res.success) {
+            this.props.notifyFn("success", "密码更改成功，返回登录页面");
+
+            setTimeout(this.backToLogin, 2000);
+          } else {
+            this.props.notifyFn("error", "用户名或者密码错误");
+          }
+        });
+    }
+  };
+
+  onFormInputChange = (event) => {
+    this.setState({
+      [event.target.name]: event.target.value,
+    });
   };
 
   render() {
@@ -22,7 +70,10 @@ class ChangePassword extends Component {
               type="text"
               className="form-control"
               placeholder="用户名"
-              value=""
+              name="user_id"
+              value={this.state.user_id}
+              onChange={this.onFormInputChange}
+              required
             />
           </div>
           <div className="form-group">
@@ -30,7 +81,10 @@ class ChangePassword extends Component {
               type="password"
               className="form-control"
               placeholder="原密码"
-              value=""
+              name="old_password"
+              value={this.state.old_password}
+              onChange={this.onFormInputChange}
+              required
             />
           </div>
           <div className="form-group">
@@ -38,7 +92,10 @@ class ChangePassword extends Component {
               type="password"
               className="form-control"
               placeholder="新密码"
-              value=""
+              name="new_password"
+              value={this.state.new_password}
+              onChange={this.onFormInputChange}
+              required
             />
           </div>
           <div className="form-group">
@@ -46,7 +103,10 @@ class ChangePassword extends Component {
               type="password"
               className="form-control"
               placeholder="确认新密码"
-              value=""
+              name="new_password_repeat"
+              value={this.state.new_password_repeat}
+              onChange={this.onFormInputChange}
+              required
             />
           </div>
           <div className="form-group text-center">
