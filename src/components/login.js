@@ -33,11 +33,13 @@ class Login extends Component {
         if (res.success) {
           let role = res.subjects.role;
           window.localStorage.setItem("token", res.subjects.token);
+          window.localStorage.setItem("user_id", this.state.user_id);
           if (role == 0) {
+            this.props.history.push("/student/home");
           } else if (role == 1) {
             this.props.history.push("/teacher/home");
           } else {
-            this.props.history.push("/student/home");
+            this.notifyFn("error", "该用户类型不存在", 3000);
           }
         } else {
           console.log(this.props.notifyFn);

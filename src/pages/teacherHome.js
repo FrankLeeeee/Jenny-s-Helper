@@ -7,7 +7,47 @@ import { Link } from "react-router-dom";
 export default class TeacherHomePage extends Component {
   constructor(props) {
     super(props);
+
+    var today = new Date();
+    var month = "" + (today.getMonth() + 1),
+      year = "" + today.getFullYear();
+
+    if (month.length < 2) month = "0" + month;
+
+    this.state = {
+      month_choice: {
+        year: year,
+        month: month,
+      },
+      task_ids: [],
+    };
   }
+
+  componentWillMount = () => {
+    fetch(
+      `http://localhost:8000/student/quiz/completion?select_time=${this.state.month_choice.year}-${this.state.month_choice.month}`,
+      {
+        method: "GET",
+        headers: {
+          token: window.localStorage.token,
+        },
+        mode: "cors",
+        cache: "no-cache",
+      }
+    )
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.success) {
+          var task_ids = res.subjects.map((item) => item.task_id);
+
+          this.setState({
+            task_ids: task_ids,
+          });
+        } else {
+          NotificationManager.error("获取听写作业失败", "Error", 3000);
+        }
+      });
+  };
 
   render() {
     return (
@@ -32,9 +72,6 @@ export default class TeacherHomePage extends Component {
                         点击开始
                       </Link>
                     </div>
-                    <div className="col-auto">
-                      <i className="fas fa-calendar fa-2x text-gray-300"></i>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -49,12 +86,31 @@ export default class TeacherHomePage extends Component {
                       <h1 className="text-xs font-weight-bold text-success text-uppercase mb-1">
                         听写成绩
                       </h1>
-                      <div className="h5 mb-0 font-weight-bold text-gray-800">
-                        list
-                      </div>
-                    </div>
-                    <div className="col-auto">
-                      <i className="fas fa-calendar fa-2x text-gray-300"></i>
+                      <table className="table mb-0">
+                        <tbody>
+                          {this.state.task_ids.length == 0 ? (
+                            <tr>
+                              <th scope="row">无</th>
+                            </tr>
+                          ) : (
+                            this.state.task_ids.map((item, idx) => {
+                              var url = `/teacher/dictation/${item}`;
+                              return (
+                                <tr key={idx}>
+                                  <th scope="row">
+                                    <Link
+                                      className="mb-0 font-weight-bold"
+                                      to={url}
+                                    >
+                                      {item}
+                                    </Link>
+                                  </th>
+                                </tr>
+                              );
+                            })
+                          )}
+                        </tbody>
+                      </table>
                     </div>
                   </div>
                 </div>

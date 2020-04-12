@@ -42,3 +42,7 @@
 .border-left-success {
   border-left: 0.25rem solid #1cc88a !important;
 }
+
+.border-left-warning {
+  border-left: 0.25rem solid #ffc107 !important;
+}

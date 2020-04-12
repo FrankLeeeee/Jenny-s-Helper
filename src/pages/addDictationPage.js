@@ -10,11 +10,12 @@ import {
   NotificationContainer,
   NotificationManager,
 } from "react-notifications";
+import formatDate from "../utils";
 
 export default class AddDictationPage extends Component {
   state = {
     date: new Date(),
-    wordlist: [],
+    word_list: [],
     pass_count: 0,
   };
 
@@ -27,33 +28,60 @@ export default class AddDictationPage extends Component {
     if (
       today.getFullYear() > this.state.date.getFullYear() ||
       (today.getFullYear() == this.state.date.getFullYear() &&
-        today.getUTCMonth() < this.state.date.getUTCMonth()) ||
+        today.getUTCMonth() > this.state.date.getUTCMonth()) ||
       (today.getFullYear() == this.state.date.getFullYear() &&
         today.getUTCMonth() == this.state.date.getUTCMonth() &&
-        today.getUTCDate() < this.state.date.getUTCDate())
+        today.getUTCDate() > this.state.date.getUTCDate())
     ) {
       NotificationManager.error(
         "无效日期，听写日期应该大于等于今天日期",
         "Error",
         3000
       );
+    } else if (
+      this.state.pass_count > this.state.word_list.length ||
+      this.state.pass_count < 0
+    ) {
+      NotificationManager.error(
+        "几个题数不能大于总题数或者为负",
+        "Error",
+        3000
+      );
+    } else if (this.state.word_list.length == 0) {
+      NotificationManager.error("没有添加听写内容", "Error", 3000);
     } else {
-      console.log(this.state);
       fetch("http://localhost:8000/word/add", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          token: "7e88046b81d36c66202c8404da39df7a", //window.localStorage.getItem("token"),
+          token: window.localStorage.token,
         },
-        body: JSON.stringify(this.state),
+        body: JSON.stringify({
+          task_id: formatDate(this.state.date),
+          word_list: this.state.word_list,
+          pass_count: this.state.pass_count,
+        }),
         mode: "cors",
         cache: "no-cache",
       })
         .then((res) => res.json())
         .then((res) => {
-          console.log(res);
+          if (res.success) {
+            NotificationManager.success(
+              "任务添加成功，返回主页",
+              "Success",
+              2000
+            );
+            setTimeout(this.backToHome, 2000);
+          } else {
+            NotificationManager.error("网络出错啦", "Error", 3000);
+          }
         });
     }
+  };
+
+  backToHome = () => {
+    this.props.history.push("/teacher/home");
   };
 
   handleDateChange = (date) => {
@@ -64,21 +92,21 @@ export default class AddDictationPage extends Component {
 
   handleChineseChange = (e) => {
     var key = e.target.getAttribute("data-idx");
-    var items = this.state.wordlist;
+    var items = this.state.word_list;
     items[key].chinese = e.target.value;
 
     this.setState({
-      wordlist: items,
+      word_list: items,
     });
   };
 
   handleEnglishChange = (e) => {
     var key = e.target.getAttribute("data-idx");
-    var items = this.state.wordlist;
+    var items = this.state.word_list;
     items[key].english = e.target.value;
 
     this.setState({
-      wordlist: items,
+      word_list: items,
     });
   };
 
@@ -94,8 +122,15 @@ export default class AddDictationPage extends Component {
   };
 
   addRow = () => {
-    var list = this.state.wordlist.concat({ chinese: "", english: "" });
-    this.setState({ wordlist: list });
+    var list = this.state.word_list.concat({ chinese: "", english: "" });
+    this.setState({ word_list: list });
+  };
+
+  removeRow = (event) => {
+    var idx = event.target.getAttribute("data-idx");
+    var temp_list = this.state.word_list;
+    temp_list.splice(idx, 1);
+    this.setState({ word_list: temp_list });
   };
 
   render() {
@@ -153,16 +188,17 @@ export default class AddDictationPage extends Component {
                 <thead>
                   <th scope="col">中文</th>
                   <th scope="col">英文</th>
+                  <th scope="col"></th>
                 </thead>
                 <tbody>
-                  {this.state.wordlist.map((item, idx) => {
+                  {this.state.word_list.map((item, idx) => {
                     return (
                       <tr key={idx}>
                         <td>
                           <input
                             type="text"
                             data-idx={idx}
-                            value={this.state.wordlist[idx].chinese}
+                            value={this.state.word_list[idx].chinese}
                             onChange={this.handleChineseChange}
                             required
                           ></input>
@@ -171,10 +207,20 @@ export default class AddDictationPage extends Component {
                           <input
                             type="text"
                             data-idx={idx}
-                            value={this.state.wordlist[idx].english}
+                            value={this.state.word_list[idx].english}
                             onChange={this.handleEnglishChange}
                             required
                           ></input>
+                        </td>
+                        <td>
+                          <button
+                            type="button"
+                            data-idx={idx}
+                            className="btn btn-danger btn-sm"
+                            onClick={this.removeRow}
+                          >
+                            X
+                          </button>
                         </td>
                       </tr>
                     );
