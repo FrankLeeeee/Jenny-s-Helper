@@ -1,6 +1,3 @@
-.w-500 {
-  width: 500px;
-}
 .btnSubmit {
   width: 50%;
   border-radius: 1rem;
@@ -35,6 +32,10 @@
   transform: translate(-50%, -50%);
 }
 
+.page-center {
+  width: 500px;
+}
+
 .border-left-primary {
   border-left: 0.25rem solid #4e73df !important;
 }
@@ -45,4 +46,22 @@
 
 .border-left-warning {
   border-left: 0.25rem solid #ffc107 !important;
+}
+
+@media screen and (max-width: 540px) {
+  .page-center {
+    width: 75%;
+  }
+}
+/* For Tablets */
+@media screen and (min-width: 540px) and (max-width: 780px) {
+  .page-center {
+    width: 50%;
+  }
+}
+
+@media screen and (min-width: 780px) and (max-width: 1080px) {
+  .page-center {
+    width: 40%;
+  }
 }

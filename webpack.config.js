@@ -8,7 +8,7 @@ function resolve(dir) {
 }
 
 module.exports = {
-  mode: "production",
+  // mode: "production",
   entry: "./src/index.js",
   output: {
     filename: "bundle.js",
