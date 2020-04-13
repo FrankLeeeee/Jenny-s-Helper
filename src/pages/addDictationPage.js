@@ -137,8 +137,8 @@ export default class AddDictationPage extends Component {
     return (
       <div>
         <Navbar />
-        <div className="container general-form rounded mt-5">
-          <form onSubmit={this.onFormSubmit}>
+        <div className="container mt-5 p-3">
+          <form onSubmit={this.onFormSubmit} className="general-form rounded">
             <h4 className="text-center">添加听写</h4>
             <div className="row">
               <div className="col">
@@ -183,7 +183,7 @@ export default class AddDictationPage extends Component {
                 </button>
               </div>
             </div>
-            <div className="form-group mt-2">
+            <div className="form-group mt-2 table-responsive-sm table-responsive-md">
               <table className="table">
                 <thead>
                   <th scope="col">中文</th>
@@ -201,6 +201,7 @@ export default class AddDictationPage extends Component {
                             value={this.state.word_list[idx].chinese}
                             onChange={this.handleChineseChange}
                             required
+                            className="form-control"
                           ></input>
                         </td>
                         <td>
@@ -209,6 +210,7 @@ export default class AddDictationPage extends Component {
                             data-idx={idx}
                             value={this.state.word_list[idx].english}
                             onChange={this.handleEnglishChange}
+                            className="form-control"
                             required
                           ></input>
                         </td>
