@@ -43,7 +43,7 @@ export default class AddDictationPage extends Component {
       this.state.pass_count < 0
     ) {
       NotificationManager.error(
-        "几个题数不能大于总题数或者为负",
+        "及格题数不能大于总题数或者为负",
         "Error",
         3000
       );
