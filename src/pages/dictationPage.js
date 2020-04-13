@@ -106,6 +106,12 @@ export default class DictationPage extends Component {
     }
   };
 
+  handleEnterKey = (e) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+    }
+  };
+
   handleAnswerChange = (e) => {
     var idx = e.target.getAttribute("data-idx");
     var items = this.state.word_list;
@@ -149,6 +155,11 @@ export default class DictationPage extends Component {
 
   onFormSubmit = (e) => {
     e.preventDefault();
+
+    if (e.key === "Enter") {
+      return null;
+    }
+
     var word_list = this.state.word_list.map((item) => {
       return {
         id: item.word_id,
@@ -203,7 +214,7 @@ export default class DictationPage extends Component {
       <div>
         <Navbar />
         <div className="fluid-container pl-3 pr-3 mt-3 mb-3">
-          <form onSubmit={this.onFormSubmit}>
+          <form onSubmit={this.onFormSubmit} onKeyDown={this.handleEnterKey}>
             <div className="row">
               <div className="col">
                 <div className="float-right pr-3">

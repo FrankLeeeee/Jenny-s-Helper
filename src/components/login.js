@@ -13,6 +13,12 @@ class Login extends Component {
     };
   }
 
+  handleEnterKey = (e) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+    }
+  };
+
   loginOnSubmit = (event) => {
     event.preventDefault();
 
@@ -62,7 +68,10 @@ class Login extends Component {
         <div className="row">
           <div className="col float-center">
             <div className="general-form rounded">
-              <form onSubmit={this.loginOnSubmit}>
+              <form
+                onSubmit={this.loginOnSubmit}
+                onKeyDown={this.handleEnterKey}
+              >
                 <div className="text-center mb-3">
                   <img src={logo} width="50%" alt="logo" />
                 </div>

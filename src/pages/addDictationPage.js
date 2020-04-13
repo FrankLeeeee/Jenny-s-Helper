@@ -19,8 +19,18 @@ export default class AddDictationPage extends Component {
     pass_count: 0,
   };
 
+  handleEnterKey = (e) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+    }
+  };
+
   onFormSubmit = (event) => {
     event.preventDefault();
+
+    if (event.key === "Enter") {
+      return null;
+    }
 
     // check whether the date if before today
     var today = new Date();
@@ -138,7 +148,11 @@ export default class AddDictationPage extends Component {
       <div>
         <Navbar />
         <div className="container mt-5 p-3">
-          <form onSubmit={this.onFormSubmit} className="general-form rounded">
+          <form
+            onSubmit={this.onFormSubmit}
+            className="general-form rounded"
+            onKeyDown={this.handleEnterKey}
+          >
             <h4 className="text-center">添加听写</h4>
             <div className="row">
               <div className="col">
