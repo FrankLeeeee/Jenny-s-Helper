@@ -24,7 +24,7 @@ export default class StudentResultPage extends Component {
 
   componentWillMount = () => {
     // if the dictation is completed, fetch student's answers as well
-    var url = `http://localhost:8000/word/completion?user_id=${this.state.user_id}&task_id=${this.state.task_id}`;
+    var url = `http://47.74.186.167:8080/word/completion?user_id=${this.state.user_id}&task_id=${this.state.task_id}`;
 
     fetch(url, {
       method: "GET",

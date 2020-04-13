@@ -44,7 +44,7 @@ export default class StudentHomePage extends Component {
   componentWillMount = () => {
     // fetch the current dictation tasks
     fetch(
-      `http://localhost:8000/student/quiz/completion?select_time=${this.state.today.year}-${this.state.today.month}`,
+      `http://47.74.186.167:8080/student/quiz/completion?select_time=${this.state.today.year}-${this.state.today.month}`,
       {
         method: "GET",
         headers: {
@@ -244,9 +244,13 @@ export default class StudentHomePage extends Component {
                               </th>
                               <th>
                                 {item.pass ? (
-                                  <span class="badge badge-success">及格</span>
+                                  <span className="badge badge-success">
+                                    及格
+                                  </span>
                                 ) : (
-                                  <span class="badge badge-danger">未及格</span>
+                                  <span className="badge badge-danger">
+                                    未及格
+                                  </span>
                                 )}
                               </th>
                             </tr>

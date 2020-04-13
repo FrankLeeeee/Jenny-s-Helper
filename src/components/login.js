@@ -16,7 +16,7 @@ class Login extends Component {
   loginOnSubmit = (event) => {
     event.preventDefault();
 
-    fetch("http://localhost:8000/user/login", {
+    fetch("http://47.74.186.167:8080/user/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

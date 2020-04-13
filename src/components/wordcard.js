@@ -10,11 +10,11 @@ export default class WordCard extends React.Component {
     const { question } = this.props;
 
     if (this.props.correct == 1) {
-      var color = "text-success";
+      var color = "border border-success";
     } else if (this.props.correct == 0) {
-      var color = "text-danger";
+      var color = "border border-danger";
     } else {
-      var color = "text-dark";
+      var color = "";
     }
 
     return (

@@ -28,7 +28,7 @@ export default class DictationPage extends Component {
   componentWillMount = () => {
     // if the dictation is completed, fetch student's answers as well
     if (this.state.completed) {
-      var url = `http://localhost:8000/word/completion?user_id=${this.state.user_id}&task_id=${this.state.task_id}`;
+      var url = `http://47.74.186.167:8080/word/completion?user_id=${this.state.user_id}&task_id=${this.state.task_id}`;
 
       fetch(url, {
         method: "GET",
@@ -38,6 +38,7 @@ export default class DictationPage extends Component {
         .then((res) => res.json())
         .then((res) => {
           if (res.success) {
+            console.log(res);
             var word_list = res.subjects.word_list.map((item) => {
               return {
                 word_id: item.word_id,
@@ -80,7 +81,7 @@ export default class DictationPage extends Component {
     }
     // if not completed, only fetch the questions
     else {
-      var url = `http://localhost:8000/student/quiz/get?task_id=${this.state.task_id}`;
+      var url = `http://47.74.186.167:8080/student/quiz/get?task_id=${this.state.task_id}`;
       fetch(url, {
         method: "GET",
         mode: "cors",
@@ -117,9 +118,11 @@ export default class DictationPage extends Component {
 
   createCards = () => {
     return this.state.word_list.map((item, idx) => {
+      console.log(item);
       if (
         item.hasOwnProperty("english") &&
-        item.hasOwnProperty("student_answer")
+        item.hasOwnProperty("student_answer") &&
+        item.student_answer != ""
       ) {
         if (item.english == item.student_answer) {
           var correct = 1;
@@ -148,12 +151,12 @@ export default class DictationPage extends Component {
     e.preventDefault();
     var word_list = this.state.word_list.map((item) => {
       return {
-        id: item.id,
+        id: item.word_id,
         student_answer: item.student_answer,
       };
     });
 
-    fetch("http://localhost:8000/student/quiz/submit", {
+    fetch("http://47.74.186.167:8080/student/quiz/submit", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -183,6 +186,7 @@ export default class DictationPage extends Component {
               "Warning",
               3000
             );
+            console.log(word_list);
           }
         } else {
           NotificationManager.error("提交作业失败", "Error", 3000);

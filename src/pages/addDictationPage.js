@@ -50,7 +50,7 @@ export default class AddDictationPage extends Component {
     } else if (this.state.word_list.length == 0) {
       NotificationManager.error("没有添加听写内容", "Error", 3000);
     } else {
-      fetch("http://localhost:8000/word/add", {
+      fetch("http://47.74.186.167:8080/word/add", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

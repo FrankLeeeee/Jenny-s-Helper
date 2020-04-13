@@ -1,13 +1,14 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
 
 function resolve(dir) {
   return path.join(__dirname, dir);
 }
 
 module.exports = {
+  mode: "production",
   entry: "./src/index.js",
   output: {
     filename: "bundle.js",
@@ -15,7 +16,8 @@ module.exports = {
     publicPath: "/",
   },
   optimization: {
-    minimizer: [new UglifyJsPlugin()],
+    minimize: true,
+    minimizer: [new TerserPlugin()],
   },
   plugins: [
     new CleanWebpackPlugin(),
