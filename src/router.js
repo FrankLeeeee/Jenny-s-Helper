@@ -1,19 +1,19 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import LoginPage from "./pages/loginPage";
-import DictationPage from "./pages/dictationPage";
-import ChangePasswordPage from "./pages/changePasswordPage";
-import StudentHomePage from "./pages/studentHome";
-import TeacherHomePage from "./pages/teacherHome";
-import AddDictationPage from "./pages/addDictationPage";
-import AllStudentResutlsPage from "./pages/allStudentResultsPage";
-import StudentResultPage from "./pages/studentResultPage";
+// import DictationPage from "./pages/dictationPage";
+// import ChangePasswordPage from "./pages/changePasswordPage";
+// import StudentHomePage from "./pages/studentHome";
+// import TeacherHomePage from "./pages/teacherHome";
+// import AddDictationPage from "./pages/addDictationPage";
+// import AllStudentResutlsPage from "./pages/allStudentResultsPage";
+// import StudentResultPage from "./pages/studentResultPage";
 
 const MyRouter = () => (
   <Router>
     <Switch>
       <Route exact path="/" component={LoginPage} />
-      <Route exact path="/student/home" component={StudentHomePage} />
+      {/* <Route exact path="/student/home" component={StudentHomePage} />
       <Route exact path="/teacher/home" component={TeacherHomePage} />
       <Route exact path="/changePassword" component={ChangePasswordPage} />
       <Route
@@ -27,12 +27,12 @@ const MyRouter = () => (
         path="/teacher/dictation/:task_id"
         component={AllStudentResutlsPage}
       />
-    </Switch>
-    <Route
+      <Route
       exact
       path="/teacher/dictation/:task_id/:user_id"
       component={StudentResultPage}
-    />
+    /> */}
+    </Switch>
   </Router>
 );
 
