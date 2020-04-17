@@ -5,7 +5,7 @@ import toast from "../toast/index";
 
 export default class Navbar extends React.Component {
   show = () => {
-    toast.info("hey");
+    toast.success("hey");
   };
 
   render() {

@@ -1,4 +1,3 @@
-import Toast from './toast'
-import './icons'
+import Toast from "./toast";
 
-export default Toast
+export default Toast;
