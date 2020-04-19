@@ -1,8 +1,3 @@
-import React from "react";
-import toaster from "toasted-notes";
-import "toasted-notes/src/styles.css";
-import { AiFillAccountBook } from "react-icons/ai";
-
 function formatDate(d) {
   var month = "" + (d.getMonth() + 1),
     day = "" + d.getDate(),
@@ -14,24 +9,4 @@ function formatDate(d) {
   return [year, month, day].join("-");
 }
 
-function notify(msg_type, msg, duration = 3000) {
-  switch (msg_type) {
-    case "error":
-      toaster.notify(
-        <div className="fluid-continer">
-          <div className="row">
-            <div className="col">
-              <AiFillAccountBook />
-              hello
-            </div>
-          </div>
-        </div>,
-        {
-          duration: duration,
-        }
-      );
-      break;
-  }
-}
-
-export default notify;
+export default formatDate;

@@ -1,10 +1,9 @@
 import React, { Component } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
 import Navbar from "../components/navbar";
-import Login from "../components/login";
+import SuccessFeedback from "../components/successFeedback";
 import "../static/app.css";
 
-export default class LoginPage extends Component {
+export default class ChangePasswordSuccessPage extends Component {
   render() {
     return (
       <div>
@@ -12,7 +11,7 @@ export default class LoginPage extends Component {
           <Navbar />
         </div>
         <div className="page-center">
-          <Login />
+          <SuccessFeedback message={"密码更改成功"} backURL={"/"} />
         </div>
       </div>
     );

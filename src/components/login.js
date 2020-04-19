@@ -3,6 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "../static/app.css";
 import logo from "@/assets/logo.png";
 import { withRouter, Link } from "react-router-dom";
+import toast from "../toast/toast";
 
 class Login extends Component {
   constructor(props) {
@@ -22,7 +23,7 @@ class Login extends Component {
   loginOnSubmit = (event) => {
     event.preventDefault();
 
-    fetch("http://47.74.186.167:8080/user/login", {
+    fetch("http://localhost:8000/user/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -45,11 +46,10 @@ class Login extends Component {
           } else if (role == 1) {
             this.props.history.push("/teacher/home");
           } else {
-            this.notifyFn("error", "该用户类型不存在", 3000);
+            toast.error("该用户类型不存在");
           }
         } else {
-          console.log(this.props.notifyFn);
-          this.props.notifyFn("error", "用户名或者密码错误", 3000);
+          toast.warning("用户名或者密码错误");
         }
       });
   };

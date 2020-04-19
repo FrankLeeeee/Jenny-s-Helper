@@ -5,11 +5,7 @@ import Navbar from "../components/navbar";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import creatHistory from "history/createBrowserHistory";
-import "react-notifications/lib/notifications.css";
-import {
-  NotificationContainer,
-  NotificationManager,
-} from "react-notifications";
+import toast from "../toast/toast";
 import formatDate from "../utils";
 
 export default class AddDictationPage extends Component {
@@ -43,24 +39,16 @@ export default class AddDictationPage extends Component {
         today.getUTCMonth() == this.state.date.getUTCMonth() &&
         today.getUTCDate() > this.state.date.getUTCDate())
     ) {
-      NotificationManager.error(
-        "无效日期，听写日期应该大于等于今天日期",
-        "Error",
-        3000
-      );
+      toast.error("无效日期，听写日期应该大于等于今天日期");
     } else if (
       this.state.pass_count > this.state.word_list.length ||
       this.state.pass_count < 0
     ) {
-      NotificationManager.error(
-        "及格题数不能大于总题数或者为负",
-        "Error",
-        3000
-      );
+      toast.error("及格题数不能大于总题数或者为负");
     } else if (this.state.word_list.length == 0) {
-      NotificationManager.error("没有添加听写内容", "Error", 3000);
+      toast.error("没有添加听写内容");
     } else {
-      fetch("http://47.74.186.167:8080/word/add", {
+      fetch("http://localhost:8000/word/add", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -77,14 +65,9 @@ export default class AddDictationPage extends Component {
         .then((res) => res.json())
         .then((res) => {
           if (res.success) {
-            NotificationManager.success(
-              "任务添加成功，返回主页",
-              "Success",
-              2000
-            );
-            setTimeout(this.backToHome, 2000);
+            this.props.history.push("/teacher/addDictation/success");
           } else {
-            NotificationManager.error("网络出错啦", "Error", 3000);
+            toast.error("网络出错啦");
           }
         });
     }
@@ -259,9 +242,6 @@ export default class AddDictationPage extends Component {
           </form>
         </div>
         <div className="container pl-3 pr-3"></div>
-        <div>
-          <NotificationContainer />
-        </div>
       </div>
     );
   }

@@ -1,13 +1,8 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import logo from "@/assets/logo.png";
-import toast from "../toast/index";
 
 export default class Navbar extends React.Component {
-  show = () => {
-    toast.success("hey");
-  };
-
   render() {
     return (
       <nav className="navbar navbar-light bg-dark">
@@ -21,7 +16,6 @@ export default class Navbar extends React.Component {
           />
           Jenny's Helper
         </div>
-        <button onClick={this.show}>btn</button>
       </nav>
     );
   }

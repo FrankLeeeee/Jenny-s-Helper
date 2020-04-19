@@ -3,6 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "../static/app.css";
 import logo from "@/assets/logo.png";
 import { withRouter } from "react-router-dom";
+import toast from "../toast/toast";
 
 class ChangePassword extends Component {
   constructor(props) {
@@ -23,9 +24,9 @@ class ChangePassword extends Component {
     event.preventDefault();
 
     if (this.state.new_password != this.state.new_password_repeat) {
-      this.props.notifyFn("error", "两次输入的密码不一致");
+      toast.error("两次输入的密码不一致");
     } else {
-      fetch("http://47.74.186.167:8080/user/update", {
+      fetch("http://localhost:8000/user/update", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -40,13 +41,10 @@ class ChangePassword extends Component {
       })
         .then((res) => res.json())
         .then((res) => {
-          console.log(res);
           if (res.success) {
-            this.props.notifyFn("success", "密码更改成功，返回登录页面");
-
-            setTimeout(this.backToLogin, 2000);
+            this.props.history.push("/changePassword/success");
           } else {
-            this.props.notifyFn("error", "用户名或者密码错误");
+            toast.error("用户名或者密码错误");
           }
         });
     }
