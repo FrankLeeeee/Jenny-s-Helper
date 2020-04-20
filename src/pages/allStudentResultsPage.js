@@ -2,12 +2,8 @@ import React, { Component } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Navbar from "../components/navbar";
 import "../static/app.css";
-import "react-notifications/lib/notifications.css";
-import {
-  NotificationContainer,
-  NotificationManager,
-} from "react-notifications";
-import "@fortawesome/fontawesome-free/js/all";
+import EyeTwoTone from "@ant-design/icons/EyeTwoTone";
+import toast from "../toast/toast";
 import { Link } from "react-router-dom";
 
 export default class AllStudentResutlsPage extends Component {
@@ -21,17 +17,7 @@ export default class AllStudentResutlsPage extends Component {
   }
 
   componentWillMount = () => {
-    // this.setState({
-    //   studnet_list: [
-    //     {
-    //       student_name: "jenny",
-    //       student_id: "20200001",
-    //       pass: false,
-    //       completion: true,
-    //     },
-    //   ],
-    // });
-    fetch(`http://47.74.186.167:8080/pass/get?task_id=${this.state.task_id}`, {
+    fetch(`http://localhost:8000/pass/get?task_id=${this.state.task_id}`, {
       method: "GET",
       headers: {
         token: window.localStorage.token,
@@ -45,9 +31,8 @@ export default class AllStudentResutlsPage extends Component {
           this.setState({
             student_list: res.subjects.student_list,
           });
-          console.log(this.state);
         } else {
-          NotificationManager.error("加载学生名单失败", "Error", 3000);
+          toast.error("加载学生名单失败");
         }
       });
   };
@@ -89,11 +74,9 @@ export default class AllStudentResutlsPage extends Component {
                 )}
                 <td>
                   <Link
-                    className="btn btn-info btn-sm"
-                    type="button"
                     to={`/teacher/dictation/${this.state.task_id}/${item.student_id}`}
                   >
-                    <i className="fa fa-search" aria-hidden="true"></i>
+                    <EyeTwoTone />
                   </Link>
                 </td>
               </tr>
@@ -132,9 +115,6 @@ export default class AllStudentResutlsPage extends Component {
             </div>
           </div>
           <div>{this.renderStudentList()}</div>
-        </div>
-        <div>
-          <NotificationContainer />
         </div>
       </div>
     );

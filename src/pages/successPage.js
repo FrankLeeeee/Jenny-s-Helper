@@ -3,7 +3,7 @@ import Navbar from "../components/navbar";
 import SuccessFeedback from "../components/successFeedback";
 import "../static/app.css";
 
-export default class ChangePasswordSuccessPage extends Component {
+export default class SuccessPage extends Component {
   render() {
     return (
       <div>
@@ -11,7 +11,10 @@ export default class ChangePasswordSuccessPage extends Component {
           <Navbar />
         </div>
         <div className="page-center">
-          <SuccessFeedback message={"密码更改成功"} backURL={"/"} />
+          <SuccessFeedback
+            message={this.props.message}
+            backURL={this.props.url}
+          />
         </div>
       </div>
     );

@@ -2,38 +2,25 @@ import React, { Component } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../static/app.css";
 import Navbar from "../components/navbar";
-import "react-notifications/lib/notifications.css";
-import {
-  NotificationContainer,
-  NotificationManager,
-} from "react-notifications";
 import { Link } from "react-router-dom";
+import toast from "../toast/toast";
+import utils from "../utils";
 
 export default class StudentHomePage extends Component {
   constructor(props) {
     super(props);
 
-    var today = new Date();
-    var month = "" + (today.getMonth() + 1),
-      year = "" + today.getFullYear(),
-      day = "" + today.getUTCDate();
-
-    if (month.length < 2) month = "0" + month;
-    if (day.length < 2) day = "0" + day;
+    var today = utils.getToday();
 
     this.state = {
-      today: {
-        year: year,
-        month: month,
-        day: day,
-      },
+      today: today,
       uncompleted_month_choice: {
-        year: year,
-        month: month,
+        year: today.year,
+        month: today.month,
       },
       completed_month_choice: {
-        year: year,
-        month: month,
+        year: today.year,
+        month: today.month,
       },
       today_tasks: [],
       uncompleted_tasks: [],
@@ -44,7 +31,7 @@ export default class StudentHomePage extends Component {
   componentWillMount = () => {
     // fetch the current dictation tasks
     fetch(
-      `http://47.74.186.167:8080/student/quiz/completion?select_time=${this.state.today.year}-${this.state.today.month}`,
+      `http://localhost:8000/student/quiz/completion?select_time=${this.state.today.year}-${this.state.today.month}`,
       {
         method: "GET",
         headers: {
@@ -65,7 +52,7 @@ export default class StudentHomePage extends Component {
             completed_tasks: tasks.completed_tasks,
           });
         } else {
-          NotificationManager.error("获取听写作业失败", "Error", 3000);
+          toast.error("获取听写作业失败");
         }
       });
   };
@@ -96,8 +83,6 @@ export default class StudentHomePage extends Component {
   };
 
   filter_completed_tasks = (item) => {
-    var date = item.task_id.split("-");
-
     if (item.completion) {
       return true;
     } else {
@@ -121,42 +106,20 @@ export default class StudentHomePage extends Component {
     }
   };
 
-  render_today_tasks = () => {
+  render_container = (title, color, renderContentFn) => {
     return (
       <div className="row">
-        <div className="col">
-          <div className="card border-left-primary shadow h-100 py-2">
+        <div className="col mt-4">
+          <div className={`card border-left-${color} shadow h-100 py-2`}>
             <div className="card-body">
               <div className="row no-gutters align-items-center">
                 <div className="col mr-2">
-                  <h1 className="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                    今日听写
+                  <h1
+                    className={`text-xs font-weight-bold text-${color} text-uppercase mb-1`}
+                  >
+                    {title}
                   </h1>
-                  <table className="table mb-0">
-                    <tbody>
-                      {this.state.today_tasks.length == 0 ? (
-                        <tr>
-                          <th scope="row">无</th>
-                        </tr>
-                      ) : (
-                        this.state.today_tasks.map((item, idx) => {
-                          var url = `/student/dictation/${item.task_id}?completed=false`;
-                          return (
-                            <tr key={idx}>
-                              <th scope="row">
-                                <Link
-                                  className="mb-0 font-weight-bold"
-                                  to={url}
-                                >
-                                  {item.task_id}
-                                </Link>
-                              </th>
-                            </tr>
-                          );
-                        })
-                      )}
-                    </tbody>
-                  </table>
+                  <table className="table mb-0">{renderContentFn()}</table>
                 </div>
               </div>
             </div>
@@ -166,105 +129,92 @@ export default class StudentHomePage extends Component {
     );
   };
 
-  render_uncompleted_tasks = () => {
+  render_content_for_today_tasks = () => {
     return (
-      <div className="row">
-        <div className="col mt-4">
-          <div className="card border-left-warning shadow h-100 py-2">
-            <div className="card-body">
-              <div className="row no-gutters align-items-center">
-                <div className="col mr-2">
-                  <h1 className="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                    未完成
-                  </h1>
-                  <table className="table mb-0">
-                    <tbody>
-                      {this.state.uncompleted_tasks.length == 0 ? (
-                        <tr>
-                          <th scope="row">无</th>
-                        </tr>
-                      ) : (
-                        this.state.uncompleted_tasks.map((item, idx) => {
-                          var url = `/student/dictation/${item.task_id}?completed=false`;
-                          return (
-                            <tr key={idx}>
-                              <th scope="row">
-                                <Link
-                                  className="mb-0 font-weight-bold text-warning"
-                                  to={url}
-                                >
-                                  {item.task_id}
-                                </Link>
-                              </th>
-                            </tr>
-                          );
-                        })
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <tbody>
+        {this.state.today_tasks.length == 0 ? (
+          <tr>
+            <th scope="row" className="text-primary">
+              无
+            </th>
+          </tr>
+        ) : (
+          this.state.today_tasks.map((item, idx) => {
+            var url = `/student/dictation/uncompleted/${item.task_id}`;
+            return (
+              <tr key={idx}>
+                <th scope="row">
+                  <Link className="mb-0 font-weight-bold text-primary" to={url}>
+                    {item.task_id}
+                  </Link>
+                </th>
+              </tr>
+            );
+          })
+        )}
+      </tbody>
     );
   };
 
-  render_completed_tasks = () => {
+  render_content_for_uncompleted_tasks = () => {
     return (
-      <div className="row">
-        <div className="col mt-4">
-          <div className="card border-left-success shadow h-100 py-2">
-            <div className="card-body">
-              <div className="row no-gutters align-items-center">
-                <div className="col mr-2">
-                  <h1 className="text-xs font-weight-bold text-success text-uppercase mb-1">
-                    已完成
-                  </h1>
-                  <table className="table mb-0">
-                    <tbody>
-                      {this.state.completed_tasks.length == 0 ? (
-                        <tr>
-                          <th scope="row">无</th>
-                        </tr>
-                      ) : (
-                        this.state.completed_tasks.map((item, idx) => {
-                          var url = `/student/dictation/${item.task_id}?completed=true`;
+      <tbody>
+        {this.state.uncompleted_tasks.length == 0 ? (
+          <tr>
+            <th scope="row" className="text-warning">
+              无
+            </th>
+          </tr>
+        ) : (
+          this.state.uncompleted_tasks.map((item, idx) => {
+            var url = `/student/dictation/uncompleted/${item.task_id}`;
+            return (
+              <tr key={idx}>
+                <th scope="row">
+                  <Link className="mb-0 font-weight-bold text-warning" to={url}>
+                    {item.task_id}
+                  </Link>
+                </th>
+              </tr>
+            );
+          })
+        )}
+      </tbody>
+    );
+  };
 
-                          return (
-                            <tr key={idx}>
-                              <th scope="row">
-                                <Link
-                                  className="mb-0 font-weight-bold text-success"
-                                  to={url}
-                                >
-                                  {item.task_id}
-                                </Link>
-                              </th>
-                              <th>
-                                {item.pass ? (
-                                  <span className="badge badge-success">
-                                    及格
-                                  </span>
-                                ) : (
-                                  <span className="badge badge-danger">
-                                    未及格
-                                  </span>
-                                )}
-                              </th>
-                            </tr>
-                          );
-                        })
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+  render_content_for_completed_tasks = () => {
+    return (
+      <tbody>
+        {this.state.completed_tasks.length == 0 ? (
+          <tr>
+            <th scope="row" className="text-success">
+              无
+            </th>
+          </tr>
+        ) : (
+          this.state.completed_tasks.map((item, idx) => {
+            var url = `/student/dictation/completed/${item.task_id}`;
+
+            return (
+              <tr key={idx}>
+                <th scope="row">
+                  <Link className="mb-0 font-weight-bold text-success" to={url}>
+                    {item.task_id}
+                  </Link>
+                </th>
+                <th>
+                  {item.pass ? (
+                    <span className="badge badge-success">及格</span>
+                  ) : (
+                    <span className="badge badge-danger">未及格</span>
+                  )}
+                </th>
+              </tr>
+            );
+          })
+        )}
+      </tbody>
     );
   };
 
@@ -275,12 +225,27 @@ export default class StudentHomePage extends Component {
           <Navbar />
         </div>
         <div className="container mt-5">
-          <div>{this.render_today_tasks()}</div>
-          <div>{this.render_uncompleted_tasks()}</div>
-          <div>{this.render_completed_tasks()}</div>
-        </div>
-        <div>
-          <NotificationContainer />
+          <div>
+            {this.render_container(
+              "今日听写",
+              "primary",
+              this.render_content_for_today_tasks
+            )}
+          </div>
+          <div>
+            {this.render_container(
+              "未完成",
+              "warning",
+              this.render_content_for_uncompleted_tasks
+            )}
+          </div>
+          <div>
+            {this.render_container(
+              "已完成",
+              "success",
+              this.render_content_for_completed_tasks
+            )}
+          </div>
         </div>
       </div>
     );

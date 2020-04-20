@@ -4,9 +4,9 @@ import "../static/app.css";
 import Navbar from "../components/navbar";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import creatHistory from "history/createBrowserHistory";
+import { createBrowserHistory as createHistory } from "history";
 import toast from "../toast/toast";
-import formatDate from "../utils";
+import utils from "../utils";
 
 export default class AddDictationPage extends Component {
   state = {
@@ -55,7 +55,7 @@ export default class AddDictationPage extends Component {
           token: window.localStorage.token,
         },
         body: JSON.stringify({
-          task_id: formatDate(this.state.date),
+          task_id: utils.formatDate(this.state.date),
           word_list: this.state.word_list,
           pass_count: this.state.pass_count,
         }),
@@ -110,7 +110,7 @@ export default class AddDictationPage extends Component {
   };
 
   goBackPage = () => {
-    const history = creatHistory();
+    const history = createHistory();
     history.goBack();
   };
 

@@ -3,11 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "../static/app.css";
 import Navbar from "../components/navbar";
 import WordCard from "../components/wordcard";
-import {
-  NotificationContainer,
-  NotificationManager,
-} from "react-notifications";
-import queryString from "query-string";
+import toast from "../toast/toast";
 
 export default class StudentResultPage extends Component {
   constructor(props) {
@@ -34,7 +30,6 @@ export default class StudentResultPage extends Component {
       .then((res) => res.json())
       .then((res) => {
         if (res.success) {
-          console.log(res);
           var word_list = res.subjects.word_list.map((item) => {
             return {
               word_id: item.word_id,
@@ -66,7 +61,7 @@ export default class StudentResultPage extends Component {
             word_list: word_list,
           });
         } else {
-          NotificationManager.error("获取听写作业失败", "Error", 3000);
+          toast.error("获取听写作业失败");
         }
       });
   };
@@ -136,9 +131,6 @@ export default class StudentResultPage extends Component {
               <div className="row">{this.createCards()}</div>
             </div>
           </form>
-        </div>
-        <div>
-          <NotificationContainer />
         </div>
       </div>
     );
