@@ -188,7 +188,7 @@ export default class DictationPage extends Component {
         console.log(res);
         if (res.success) {
           if (res.subjects.pass) {
-            // this.props.history.push("/student/dictation/submission");
+            this.props.history.push("/student/dictation/submission");
           } else {
             toast.warning("提交作业成功，但未及格。");
           }
@@ -239,7 +239,7 @@ export default class DictationPage extends Component {
                   {this.props.showResubmitButton && (
                     <button
                       className="btn btn-success m-3"
-                      type="submit"
+                      type="button"
                       onClick={this.goToResubmit}
                     >
                       重新提交
