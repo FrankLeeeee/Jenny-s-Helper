@@ -31,7 +31,7 @@ export default class StudentHomePage extends Component {
   componentWillMount = () => {
     // fetch the current dictation tasks
     fetch(
-      `http://localhost:8000/student/quiz/completion?select_time=${this.state.today.year}-${this.state.today.month}`,
+      `http://47.74.186.167:8000/student/quiz/completion?select_time=${this.state.today.year}-${this.state.today.month}`,
       {
         method: "GET",
         headers: {

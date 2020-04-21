@@ -26,7 +26,7 @@ class ChangePassword extends Component {
     if (this.state.new_password != this.state.new_password_repeat) {
       toast.error("两次输入的密码不一致");
     } else {
-      fetch("http://localhost:8000/user/update", {
+      fetch("http://47.74.186.167:8000/user/update", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

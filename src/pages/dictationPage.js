@@ -39,7 +39,7 @@ export default class DictationPage extends Component {
   };
 
   loadStateIfCompleted = () => {
-    var url = `http://localhost:8000/word/completion?user_id=${this.state.user_id}&task_id=${this.state.task_id}`;
+    var url = `http://47.74.186.167:8000/word/completion?user_id=${this.state.user_id}&task_id=${this.state.task_id}`;
 
     fetch(url, {
       method: "GET",
@@ -87,7 +87,7 @@ export default class DictationPage extends Component {
   };
 
   loadStateIfUncompleted = () => {
-    var url = `http://localhost:8000/student/quiz/get?task_id=${this.state.task_id}`;
+    var url = `http://47.74.186.167:8000/student/quiz/get?task_id=${this.state.task_id}`;
 
     fetch(url, {
       method: "GET",
@@ -170,7 +170,7 @@ export default class DictationPage extends Component {
       };
     });
 
-    fetch("http://localhost:8000/student/quiz/submit", {
+    fetch("http://47.74.186.167:8000/student/quiz/submit", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

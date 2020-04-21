@@ -26,7 +26,7 @@ export default class TeacherHomePage extends Component {
 
   componentWillMount = () => {
     fetch(
-      `http://localhost:8000/student/quiz/completion?select_time=${this.state.month_choice.year}-${this.state.month_choice.month}`,
+      `http://47.74.186.167:8000/student/quiz/completion?select_time=${this.state.month_choice.year}-${this.state.month_choice.month}`,
       {
         method: "GET",
         headers: {

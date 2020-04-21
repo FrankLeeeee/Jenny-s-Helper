@@ -17,7 +17,7 @@ export default class AllStudentResutlsPage extends Component {
   }
 
   componentWillMount = () => {
-    fetch(`http://localhost:8000/pass/get?task_id=${this.state.task_id}`, {
+    fetch(`http://47.74.186.167:8000/pass/get?task_id=${this.state.task_id}`, {
       method: "GET",
       headers: {
         token: window.localStorage.token,
