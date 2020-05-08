@@ -1,7 +1,7 @@
 server {
         listen 80;
  
-        root /home/Jenny-S-Helper/dist;
+        root /home/Jenny-s-Helper/dist;
         index index.html index.htm;
  
         location / {
