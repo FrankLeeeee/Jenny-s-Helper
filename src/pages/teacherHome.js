@@ -26,7 +26,7 @@ export default class TeacherHomePage extends Component {
 
   componentWillMount = () => {
     fetch(
-      `http://47.74.186.167:8000/student/quiz/completion?select_time=${this.state.month_choice.year}-${this.state.month_choice.month}`,
+      `http://47.74.186.167:8000/quiz/all?task_id=${this.state.month_choice.year}-${this.state.month_choice.month}`,
       {
         method: "GET",
         headers: {
@@ -39,10 +39,8 @@ export default class TeacherHomePage extends Component {
       .then((res) => res.json())
       .then((res) => {
         if (res.success) {
-          var task_ids = res.subjects.map((item) => item.task_id);
-
           this.setState({
-            task_ids: task_ids,
+            task_ids: res.subjects.task_id_list,
           });
         } else {
           toast.error("获取听写作业失败");
