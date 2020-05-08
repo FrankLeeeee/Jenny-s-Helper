@@ -7,4 +7,5 @@ RUN apt-get update && apt-get install -y nginx \
     && npm install \
     && npm run build \
     && cd ./docker \
-    && mv project.conf /etc/nginx/conf.d/
+    && mv project.conf /etc/nginx/conf.d/ \
+    && rm /etc/nginx/sites-enabled/default
