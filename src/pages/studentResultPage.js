@@ -4,6 +4,7 @@ import "../static/app.css";
 import Navbar from "../components/navbar";
 import WordCard from "../components/wordcard";
 import toast from "../toast/toast";
+import apis from "../apis";
 
 export default class StudentResultPage extends Component {
   constructor(props) {
@@ -20,7 +21,7 @@ export default class StudentResultPage extends Component {
 
   componentWillMount = () => {
     // if the dictation is completed, fetch student's answers as well
-    var url = `http://47.74.186.167:8080/word/completion?user_id=${this.state.user_id}&task_id=${this.state.task_id}`;
+    var url = `${apis.fetchStudentResults}?user_id=${this.state.user_id}&task_id=${this.state.task_id}`;
 
     fetch(url, {
       method: "GET",

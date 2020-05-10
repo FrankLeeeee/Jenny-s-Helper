@@ -5,6 +5,7 @@ import Navbar from "../components/navbar";
 import WordCard from "../components/wordcard";
 import toast from "../toast/toast";
 import { createBrowserHistory as createHistory } from "history";
+import apis from "../apis";
 
 export default class DictationPage extends Component {
   constructor(props) {
@@ -39,7 +40,7 @@ export default class DictationPage extends Component {
   };
 
   loadStateIfCompleted = () => {
-    var url = `http://47.74.186.167:8000/word/completion?user_id=${this.state.user_id}&task_id=${this.state.task_id}`;
+    var url = `${apis.fetchStudentResults}?user_id=${this.state.user_id}&task_id=${this.state.task_id}`;
 
     fetch(url, {
       method: "GET",
@@ -87,7 +88,7 @@ export default class DictationPage extends Component {
   };
 
   loadStateIfUncompleted = () => {
-    var url = `http://47.74.186.167:8000/student/quiz/get?task_id=${this.state.task_id}`;
+    var url = `${apis.fetchQuizContent}?task_id=${this.state.task_id}`;
 
     fetch(url, {
       method: "GET",
@@ -170,7 +171,7 @@ export default class DictationPage extends Component {
       };
     });
 
-    fetch("http://47.74.186.167:8000/student/quiz/submit", {
+    fetch(apis.submitQuizResults, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

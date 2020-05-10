@@ -5,6 +5,7 @@ import "../static/app.css";
 import EyeTwoTone from "@ant-design/icons/EyeTwoTone";
 import toast from "../toast/toast";
 import { Link } from "react-router-dom";
+import apis from "../apis";
 
 export default class AllStudentResutlsPage extends Component {
   constructor(props) {
@@ -17,7 +18,7 @@ export default class AllStudentResutlsPage extends Component {
   }
 
   componentWillMount = () => {
-    fetch(`http://47.74.186.167:8000/pass/get?task_id=${this.state.task_id}`, {
+    fetch(`${apis.fetchAllStudentResults}?task_id=${this.state.task_id}`, {
       method: "GET",
       headers: {
         token: window.localStorage.token,

@@ -2,10 +2,6 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 export default class WordCard extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const { question } = this.props;
 

@@ -7,6 +7,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { createBrowserHistory as createHistory } from "history";
 import toast from "../toast/toast";
 import utils from "../utils";
+import apis from "../apis";
 
 export default class AddDictationPage extends Component {
   state = {
@@ -48,7 +49,7 @@ export default class AddDictationPage extends Component {
     } else if (this.state.word_list.length == 0) {
       toast.error("没有添加听写内容");
     } else {
-      fetch("http://47.74.186.167:8000/word/add", {
+      fetch(apis.addDictation, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

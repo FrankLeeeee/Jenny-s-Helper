@@ -4,6 +4,7 @@ import "../static/app.css";
 import Navbar from "../components/navbar";
 import { Link } from "react-router-dom";
 import toast from "../toast/toast";
+import apis from "../apis";
 
 export default class TeacherHomePage extends Component {
   constructor(props) {
@@ -26,7 +27,7 @@ export default class TeacherHomePage extends Component {
 
   componentWillMount = () => {
     fetch(
-      `http://47.74.186.167:8000/quiz/all?task_id=${this.state.month_choice.year}-${this.state.month_choice.month}`,
+      `${apis.fetchQuizListForTeacher}?task_id=${this.state.month_choice.year}-${this.state.month_choice.month}`,
       {
         method: "GET",
         headers: {

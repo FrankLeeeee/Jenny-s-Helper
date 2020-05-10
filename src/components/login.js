@@ -4,6 +4,7 @@ import "../static/app.css";
 import logo from "@/assets/logo.png";
 import { withRouter, Link } from "react-router-dom";
 import toast from "../toast/toast";
+import apis from "../apis";
 
 class Login extends Component {
   constructor(props) {
@@ -23,7 +24,7 @@ class Login extends Component {
   loginOnSubmit = (event) => {
     event.preventDefault();
 
-    fetch("http://47.74.186.167:8000/user/login", {
+    fetch(apis.login, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

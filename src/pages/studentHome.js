@@ -5,6 +5,7 @@ import Navbar from "../components/navbar";
 import { Link } from "react-router-dom";
 import toast from "../toast/toast";
 import utils from "../utils";
+import apis from "../apis";
 
 export default class StudentHomePage extends Component {
   constructor(props) {
@@ -31,7 +32,7 @@ export default class StudentHomePage extends Component {
   componentWillMount = () => {
     // fetch the current dictation tasks
     fetch(
-      `http://47.74.186.167:8000/student/quiz/completion?select_time=${this.state.today.year}-${this.state.today.month}`,
+      `${apis.fetchQuizListForStudent}?select_time=${this.state.today.year}-${this.state.today.month}`,
       {
         method: "GET",
         headers: {
