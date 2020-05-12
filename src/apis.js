@@ -7,7 +7,7 @@ export default {
   fetchStudentResults: `${api}/word/completion`,
 
   // teachers
-  addDictation: `${api}/word/add`,
+  addDictation: `${api}/quiz/add`,
   fetchAllStudentResults: `${api}/pass/get`,
   fetchQuizListForTeacher: `${api}/quiz/all`,
 

@@ -13,6 +13,7 @@ export default class AddDictationPage extends Component {
   state = {
     date: new Date(),
     word_list: [],
+    sentence_list: [],
     pass_count: 0,
   };
 
@@ -84,26 +85,6 @@ export default class AddDictationPage extends Component {
     });
   };
 
-  handleChineseChange = (e) => {
-    var key = e.target.getAttribute("data-idx");
-    var items = this.state.word_list;
-    items[key].chinese = e.target.value;
-
-    this.setState({
-      word_list: items,
-    });
-  };
-
-  handleEnglishChange = (e) => {
-    var key = e.target.getAttribute("data-idx");
-    var items = this.state.word_list;
-    items[key].english = e.target.value;
-
-    this.setState({
-      word_list: items,
-    });
-  };
-
   handlePassCountChange = (e) => {
     this.setState({
       pass_count: parseInt(e.target.value),
@@ -113,18 +94,6 @@ export default class AddDictationPage extends Component {
   goBackPage = () => {
     const history = createHistory();
     history.goBack();
-  };
-
-  addRow = () => {
-    var list = this.state.word_list.concat({ chinese: "", english: "" });
-    this.setState({ word_list: list });
-  };
-
-  removeRow = (event) => {
-    var idx = event.target.getAttribute("data-idx");
-    var temp_list = this.state.word_list;
-    temp_list.splice(idx, 1);
-    this.setState({ word_list: temp_list });
   };
 
   render() {
@@ -169,65 +138,7 @@ export default class AddDictationPage extends Component {
                 </div>
               </div>
             </div>
-            <div className="row">
-              <div className="col">
-                <label htmlFor="exampleInputPassword1">单词列表</label>
-                <button
-                  type="button"
-                  onClick={this.addRow}
-                  className="btn btn-sm btn-primary float-right"
-                >
-                  添加单词
-                </button>
-              </div>
-            </div>
-            <div className="form-group mt-2 table-responsive-sm table-responsive-md">
-              <table className="table">
-                <thead>
-                  <th scope="col">中文</th>
-                  <th scope="col">英文</th>
-                  <th scope="col"></th>
-                </thead>
-                <tbody>
-                  {this.state.word_list.map((item, idx) => {
-                    return (
-                      <tr key={idx}>
-                        <td>
-                          <input
-                            type="text"
-                            data-idx={idx}
-                            value={this.state.word_list[idx].chinese}
-                            onChange={this.handleChineseChange}
-                            required
-                            className="form-control"
-                          ></input>
-                        </td>
-                        <td>
-                          <input
-                            type="text"
-                            data-idx={idx}
-                            value={this.state.word_list[idx].english}
-                            onChange={this.handleEnglishChange}
-                            className="form-control"
-                            required
-                          ></input>
-                        </td>
-                        <td>
-                          <button
-                            type="button"
-                            data-idx={idx}
-                            className="btn btn-danger btn-sm"
-                            onClick={this.removeRow}
-                          >
-                            X
-                          </button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
+
             <div className="text-center">
               <button
                 onClick={this.goBackPage}
