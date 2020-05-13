@@ -25,9 +25,21 @@ function getToday() {
   };
 }
 
-const funcs = {
-  getToday: getToday,
-  formatDate: formatDate,
+const earlier_than_today = (date) => {
+  const today = new Date();
+
+  return (
+    today.getFullYear() > date.getFullYear() ||
+    (today.getFullYear() == date.getFullYear() &&
+      today.getUTCMonth() > date.getUTCMonth()) ||
+    (today.getFullYear() == date.getFullYear() &&
+      today.getUTCMonth() == date.getUTCMonth() &&
+      today.getUTCDate() > date.getUTCDate())
+  );
 };
 
-export default funcs;
+export default {
+  getToday: getToday,
+  formatDate: formatDate,
+  earlier_than_today: earlier_than_today,
+};
