@@ -5,6 +5,7 @@ import Navbar from "../components/navbar";
 import { Link } from "react-router-dom";
 import toast from "../toast/toast";
 import apis from "../apis";
+import api_caller from "../api_caller";
 
 export default class TeacherHomePage extends Component {
   constructor(props) {
@@ -26,17 +27,11 @@ export default class TeacherHomePage extends Component {
   }
 
   componentWillMount = () => {
-    fetch(
-      `${apis.fetchQuizListForTeacher}?task_id=${this.state.month_choice.year}-${this.state.month_choice.month}`,
-      {
-        method: "GET",
-        headers: {
-          token: window.localStorage.token,
-        },
-        mode: "cors",
-        cache: "no-cache",
-      }
-    )
+    api_caller
+      .fetch_quiz_list_for_teacher(
+        this.state.month_choice.year,
+        this.state.month_choice.month
+      )
       .then((res) => res.json())
       .then((res) => {
         if (res.success) {

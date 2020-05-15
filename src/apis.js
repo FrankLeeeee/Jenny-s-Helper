@@ -4,15 +4,15 @@ export default {
   // all users
   login: `${api}/user/login`,
   changePassword: `${api}/user/update`,
-  fetchStudentResults: `${api}/word/completion`,
+  fetchStudentResults: `${api}/quiz/completion`,
 
   // teachers
-  addDictation: `${api}/quiz/add`,
-  fetchAllStudentResults: `${api}/pass/get`,
-  fetchQuizListForTeacher: `${api}/quiz/all`,
+  addDictation: `${api}/teacher/quiz/add`,
+  fetchAllStudentResults: `${api}/teacher/pass`,
+  fetchQuizListForTeacher: `${api}/teacher/quiz`,
 
   // students
   fetchQuizListForStudent: `${api}/student/quiz/completion`,
-  fetchQuizContent: `${api}/student/quiz/get`,
+  fetchQuizContent: `${api}/student/quiz`,
   submitQuizResults: `${api}/student/quiz/submit`,
 };

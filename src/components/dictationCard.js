@@ -1,7 +1,7 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-export default class WordCard extends React.Component {
+export default class DictationCard extends React.Component {
   render() {
     const { question } = this.props;
 
@@ -17,6 +17,7 @@ export default class WordCard extends React.Component {
               className={`w-100 form-control border border-${this.props.color}`}
               onChange={this.props.handleAnswerChange}
               data-idx={this.props.idx}
+              data-type={this.props.type}
               value={this.props.studentAnswer}
               required
               readOnly={this.props.readOnly}

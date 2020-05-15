@@ -8,7 +8,6 @@ import AddDictationPage from "./pages/addDictationPage";
 import DictationPage from "./pages/dictationPage";
 import StudentHomePage from "./pages/studentHome";
 import AllStudentResutlsPage from "./pages/allStudentResultsPage";
-import StudentResultPage from "./pages/studentResultPage";
 
 const MyRouter = () => (
   <Router>

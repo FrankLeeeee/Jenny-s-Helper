@@ -5,6 +5,7 @@ import logo from "@/assets/logo.png";
 import { withRouter } from "react-router-dom";
 import toast from "../toast/toast";
 import apis from "../apis";
+import api_caller from "../api_caller";
 
 class ChangePassword extends Component {
   constructor(props) {
@@ -27,19 +28,12 @@ class ChangePassword extends Component {
     if (this.state.new_password != this.state.new_password_repeat) {
       toast.error("两次输入的密码不一致");
     } else {
-      fetch(apis.changePassword, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          user_id: this.state.user_id,
-          old_password: this.state.old_password,
-          new_password: this.state.new_password,
-        }),
-        mode: "cors",
-        cache: "no-cache",
-      })
+      api_caller
+        .change_password(
+          this.state.user_id,
+          this.state.old_password,
+          this.state.new_password
+        )
         .then((res) => res.json())
         .then((res) => {
           if (res.success) {

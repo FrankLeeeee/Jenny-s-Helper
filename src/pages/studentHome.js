@@ -5,7 +5,7 @@ import Navbar from "../components/navbar";
 import { Link } from "react-router-dom";
 import toast from "../toast/toast";
 import utils from "../utils";
-import apis from "../apis";
+import api_caller from "../api_caller";
 
 export default class StudentHomePage extends Component {
   constructor(props) {
@@ -31,17 +31,11 @@ export default class StudentHomePage extends Component {
 
   componentWillMount = () => {
     // fetch the current dictation tasks
-    fetch(
-      `${apis.fetchQuizListForStudent}?select_time=${this.state.today.year}-${this.state.today.month}`,
-      {
-        method: "GET",
-        headers: {
-          token: window.localStorage.token,
-        },
-        mode: "cors",
-        cache: "no-cache",
-      }
-    )
+    api_caller
+      .fetch_quiz_list_for_student(
+        this.state.today.year,
+        this.state.today.month
+      )
       .then((res) => res.json())
       .then((res) => {
         if (res.success) {
@@ -58,10 +52,21 @@ export default class StudentHomePage extends Component {
       });
   };
 
+  compare_date = (a, b) => {
+    var a_date = new Date(a.task_id);
+    var b_date = new Date(b.task_id);
+
+    return a_date < b_date ? 1 : a_date > b_date ? -1 : 0;
+  };
+
   group_tasks = (subjects) => {
     var today_tasks = subjects.filter(this.filter_today_tasks);
     var completed_tasks = subjects.filter(this.filter_completed_tasks);
     var uncompleted_tasks = subjects.filter(this.filter_uncompleted_tasks);
+
+    completed_tasks.sort(this.compare_date);
+    uncompleted_tasks.sort(this.compare_date);
+
     return {
       today_tasks: today_tasks,
       completed_tasks: completed_tasks,

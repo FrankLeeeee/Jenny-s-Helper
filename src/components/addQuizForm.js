@@ -7,8 +7,9 @@ import "react-datepicker/dist/react-datepicker.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../static/app.css";
 import api_caller from "../api_caller";
+import { withRouter } from "react-router-dom";
 
-export default class AddQuizForm extends React.Component {
+class AddQuizForm extends React.Component {
   state = {
     date: new Date(),
     word_list: [],
@@ -45,7 +46,8 @@ export default class AddQuizForm extends React.Component {
     if (utils.earlier_than_today(this.state.date)) {
       toast.error("无效日期，听写日期应该大于等于今天日期");
     } else if (
-      this.state.pass_count > this.state.word_list.length ||
+      this.state.pass_count >
+        this.state.word_list.length + this.state.sentence_list.length ||
       this.state.pass_count < 0
     ) {
       toast.error("及格题数不能大于总题数或者为负");
@@ -55,11 +57,12 @@ export default class AddQuizForm extends React.Component {
     ) {
       toast.error("没有添加听写内容");
     } else {
-      var { date, pass_coutn, word_list, sentence_list } = this.state;
+      var { date, pass_count, word_list, sentence_list } = this.state;
       api_caller
-        .add_quiz(date, pass_coutn, word_list, sentence_list)
+        .add_quiz(date, pass_count, word_list, sentence_list)
+        .then((res) => res.json())
         .then((res) => {
-          if (res == true) {
+          if (res.success) {
             this.props.history.push("/teacher/addDictation/success");
           } else {
             toast.error("网络出错啦");
@@ -72,10 +75,18 @@ export default class AddQuizForm extends React.Component {
     var data_type = event.target.getAttribute("data-for");
 
     if (data_type == "word") {
-      var list = this.state.word_list.concat({ chinese: "", english: "" });
+      var list = this.state.word_list.concat({
+        chinese: "",
+        english: "",
+        type: data_type,
+      });
       this.setState({ word_list: list });
-    } else {
-      var list = this.state.sentence_list.concat({ chinese: "", english: "" });
+    } else if (data_type == "sentence") {
+      var list = this.state.sentence_list.concat({
+        chinese: "",
+        english: "",
+        type: data_type,
+      });
       this.setState({ sentence_list: list });
     }
   };
@@ -333,3 +344,5 @@ export default class AddQuizForm extends React.Component {
     );
   }
 }
+
+export default withRouter(AddQuizForm);

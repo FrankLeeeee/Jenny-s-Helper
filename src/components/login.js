@@ -4,7 +4,7 @@ import "../static/app.css";
 import logo from "@/assets/logo.png";
 import { withRouter, Link } from "react-router-dom";
 import toast from "../toast/toast";
-import apis from "../apis";
+import api_caller from "../api_caller";
 
 class Login extends Component {
   constructor(props) {
@@ -24,18 +24,8 @@ class Login extends Component {
   loginOnSubmit = (event) => {
     event.preventDefault();
 
-    fetch(apis.login, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        user_id: this.state.user_id,
-        password: this.state.password,
-      }),
-      mode: "cors",
-      cache: "no-cache",
-    })
+    api_caller
+      .login(this.state.user_id, this.state.password)
       .then((res) => res.json())
       .then((res) => {
         if (res.success) {

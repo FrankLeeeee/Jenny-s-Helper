@@ -2,10 +2,10 @@ import React, { Component } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../static/app.css";
 import Navbar from "../components/navbar";
-import WordCard from "../components/wordcard";
+import DictationCard from "../components/dictationCard";
 import toast from "../toast/toast";
 import { createBrowserHistory as createHistory } from "history";
-import apis from "../apis";
+import api_caller from "../api_caller";
 
 export default class DictationPage extends Component {
   constructor(props) {
@@ -23,6 +23,7 @@ export default class DictationPage extends Component {
       user_id: user_id,
       task_id: task_id,
       word_list: [],
+      sentence_list: [],
       completed: completed,
     };
   }
@@ -39,48 +40,62 @@ export default class DictationPage extends Component {
     }
   };
 
-  loadStateIfCompleted = () => {
-    var url = `${apis.fetchStudentResults}?user_id=${this.state.user_id}&task_id=${this.state.task_id}`;
+  loadStudentAnswer = (list, submission = null) => {
+    if (submission != null && submission.length > 0) {
+      var answers = submission[0].answer;
+      var answer_dict = {};
 
-    fetch(url, {
-      method: "GET",
-      mode: "cors",
-      cache: "no-cache",
-    })
+      for (let i = 0; i < answers.length; i++) {
+        answer_dict[answers[i].word_id] = answers[i].student_answer;
+      }
+
+      list = list.map((item) => {
+        if (answer_dict.hasOwnProperty(item.word_id)) {
+          item.student_answer = answer_dict[item.word_id];
+        } else {
+          item.student_answer = "";
+        }
+        return item;
+      });
+    } else {
+      list = list.map((item) => {
+        item.student_answer = "";
+        return item;
+      });
+    }
+
+    return list;
+  };
+
+  loadStateIfCompleted = () => {
+    api_caller
+      .fetch_student_results(this.state.user_id, this.state.task_id)
       .then((res) => res.json())
       .then((res) => {
         if (res.success) {
-          var word_list = res.subjects.word_list.map((item) => {
-            return {
-              word_id: item.word_id,
-              chinese: item.chinese,
-              english: item.english,
-            };
-          });
+          var word_list = res.subjects.word_list.filter(
+            (item) => item.type == "word"
+          );
+          var sentence_list = res.subjects.word_list.filter(
+            (item) => item.type == "sentence"
+          );
 
-          var answers = {};
-          if (res.subjects.submission != null) {
-            for (var i = 0; i < res.subjects.submission[0].answer.length; i++) {
-              var answer = res.subjects.submission[0].answer[i];
-              answers[answer.word_id] = answer.student_answer;
-            }
-          }
-          word_list = word_list.map((item) => {
-            var word_id = item.word_id;
+          word_list = this.loadStudentAnswer(
+            word_list,
+            res.subjects.submission
+          );
 
-            if (answers.hasOwnProperty(word_id)) {
-              item["student_answer"] = answers[word_id];
-            } else {
-              item["student_answer"] = "";
-            }
-            return item;
-          });
+          sentence_list = this.loadStudentAnswer(
+            sentence_list,
+            res.subjects.submission
+          );
 
-          console.log(word_list);
+          console.log(sentence_list);
+
           this.setState({
             word_list: word_list,
+            sentence_list: sentence_list,
           });
-          console.log(this.state);
         } else {
           toast.error("获取听写作业失败");
         }
@@ -88,50 +103,67 @@ export default class DictationPage extends Component {
   };
 
   loadStateIfUncompleted = () => {
-    var url = `${apis.fetchQuizContent}?task_id=${this.state.task_id}`;
-
-    fetch(url, {
-      method: "GET",
-      mode: "cors",
-      cache: "no-cache",
-    })
+    api_caller
+      .fetch_quiz(this.state.task_id)
       .then((res) => res.json())
       .then((res) => {
         if (res.success) {
+          var word_list = res.subjects.word_list.filter(
+            (item) => item.type == "word"
+          );
+          var sentence_list = res.subjects.word_list.filter(
+            (item) => item.type == "sentence"
+          );
+
+          word_list = this.loadStudentAnswer(word_list);
+          sentence_list = this.loadStudentAnswer(sentence_list);
+
           this.setState({
-            word_list: res.subjects.word_list.map((item) => {
-              return {
-                word_id: item.word_id,
-                chinese: item.chinese,
-                student_answer: "",
-              };
-            }),
+            word_list: word_list,
+            sentence_list: sentence_list,
           });
-          console.log(this.state);
         } else {
           toast.error("获取听写作业失败");
         }
       });
   };
 
-  handleEnterKey = (e) => {
+  handleEnterKey = (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
     }
   };
 
-  handleAnswerChange = (e) => {
-    var idx = e.target.getAttribute("data-idx");
-    var items = this.state.word_list;
-    items[idx].student_answer = e.target.value;
+  handleAnswerChange = (event) => {
+    var idx = event.target.getAttribute("data-idx");
+    var type = event.target.getAttribute("data-type");
 
-    this.setState({
-      word_list: items,
-    });
+    if (type == "word") {
+      var items = this.state.word_list;
+    } else if (type == "sentence") {
+      var items = this.state.sentence_list;
+    }
+    items[idx].student_answer = event.target.value;
+
+    if (type == "word") {
+      this.setState({
+        word_list: items,
+      });
+    } else if (type == "sentence") {
+      this.setState({
+        sentence_list: items,
+      });
+    }
   };
 
-  createCards = () => {
-    return this.state.word_list.map((item, idx) => {
+  createCards = (list, type) => {
+    if (type == "word") {
+      var size = "col-sm-6 col-md-3 col-lg-2";
+    } else if ((type = "sentence")) {
+      var size = "col-sm-12 col-md-12 col-lg-6";
+    }
+
+    return list.map((item, idx) => {
       if (this.props.showHighlight) {
         if (item.english == item.student_answer) {
           var color = "success";
@@ -141,15 +173,15 @@ export default class DictationPage extends Component {
       } else {
         var color = "dark";
       }
-
       return (
-        <div className="col-sm-6 col-md-3 col-lg-2" key={idx}>
-          <WordCard
-            question={this.state.word_list[idx].chinese}
-            studentAnswer={this.state.word_list[idx].student_answer}
+        <div className={size} key={idx}>
+          <DictationCard
+            question={list[idx].chinese}
+            studentAnswer={list[idx].student_answer}
             handleAnswerChange={this.handleAnswerChange}
             idx={idx}
             color={color}
+            type={type}
             readOnly={this.props.readOnly}
           />
         </div>
@@ -164,29 +196,14 @@ export default class DictationPage extends Component {
       return null;
     }
 
-    var word_list = this.state.word_list.map((item) => {
-      return {
-        id: item.word_id,
-        student_answer: item.student_answer,
-      };
-    });
-
-    fetch(apis.submitQuizResults, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        token: window.localStorage.token,
-      },
-      body: JSON.stringify({
-        task_id: this.state.task_id,
-        word_list: word_list,
-      }),
-      mode: "cors",
-      cache: "no-cache",
-    })
+    api_caller
+      .submit_quiz_results(
+        this.state.task_id,
+        this.state.word_list,
+        this.state.sentence_list
+      )
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
         if (res.success) {
           if (res.subjects.pass) {
             this.props.history.push("/student/dictation/submission");
@@ -220,7 +237,18 @@ export default class DictationPage extends Component {
           </div>
           <form onSubmit={this.onFormSubmit} onKeyDown={this.handleEnterKey}>
             <div className="container pl-3 pr-3">
-              <div className="form-row">{this.createCards()}</div>
+              {this.state.word_list.length > 0 && (
+                <h5 className="ml-3">单词</h5>
+              )}
+              <div className="form-row">
+                {this.createCards(this.state.word_list, "word")}
+              </div>
+              {this.state.sentence_list.length > 0 && (
+                <h5 className="ml-3">句子</h5>
+              )}
+              <div className="form-row">
+                {this.createCards(this.state.sentence_list, "sentence")}
+              </div>
             </div>
             <div className="form-row">
               <div className="col d-flex justify-content-center">
